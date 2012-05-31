@@ -20,7 +20,6 @@
 package net.mcnewfamily.rmcnew.view;
 
 import net.mcnewfamily.rmcnew.controller.ParseController;
-import net.mcnewfamily.rmcnew.model.SheetNotFoundException;
 import net.mcnewfamily.rmcnew.model.Util;
 
 import javax.swing.*;
@@ -34,16 +33,16 @@ public class ParseTab extends JComponent implements ActionListener {
     protected String buttonText;
     protected String successText;
     protected ParseController controller;
-    protected final String inputPrompt = "Select Excel manifest file from CRC";
-	protected final String outputPrompt = "Select Output filename (.xlsx)";
-	protected final String inputFilenameLabelBasis = "Excel manifest file from CRC:  ";
-	protected final String outputFilenameLabelBasis = "Output filename:  ";
+    protected final String inputPrompt = "Select Excel roster file";
+	protected final String outputPrompt = "Select Output folder";
+	protected final String inputFilenameLabelBasis = "Excel roster file:  ";
+	protected final String outputFilenameLabelBasis = "Output folder:  ";
 	protected final String errorMessageTitle = "File Not Specified";
-	protected final String inputErrorMessage = "Please select the Excel manifest input file";
-	protected final String outputErrorMessage = "Please select the desired name for the output file";
+	protected final String inputErrorMessage = "Please select the Excel roster input file";
+	protected final String outputErrorMessage = "Please select the desired output folder";
 
-	protected File manifestInputFile = null;
-	protected File manifestOutputFile = null;
+	protected File excelInputFile = null;
+	protected File outputFolder = null;
 
 	protected JButton inputButton;
 	protected JButton outputButton;
@@ -75,7 +74,7 @@ public class ParseTab extends JComponent implements ActionListener {
 		outputFileChooser = new JFileChooser();
 		outputFileChooser.setDialogTitle(outputPrompt);
 		outputFileChooser.setDialogType(JFileChooser.SAVE_DIALOG);
-		outputFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		outputFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		// UI layout
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -96,27 +95,24 @@ public class ParseTab extends JComponent implements ActionListener {
 		if (actionEvent.getSource() == inputButton) {
 			int returnValue = inputFileChooser.showOpenDialog(ParseTab.this);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				manifestInputFile = inputFileChooser.getSelectedFile();
-				inputFilenameLabel.setText(inputFilenameLabelBasis + manifestInputFile.getName());
+				excelInputFile = inputFileChooser.getSelectedFile();
+				inputFilenameLabel.setText(inputFilenameLabelBasis + excelInputFile.getName());
 			}
 		} else if (actionEvent.getSource() == outputButton) {
 			int returnValue = outputFileChooser.showSaveDialog(ParseTab.this);
 			if (returnValue == JFileChooser.APPROVE_OPTION) {
-				manifestOutputFile = outputFileChooser.getSelectedFile();
-                manifestOutputFile = Util.attachXlsxExtensionIfMissing(manifestOutputFile);
-				outputFilenameLabel.setText(outputFilenameLabelBasis + manifestOutputFile.getName());
+				outputFolder = outputFileChooser.getSelectedFile();
+				outputFilenameLabel.setText(outputFilenameLabelBasis + outputFolder.getName());
 			}
 		} else if (actionEvent.getSource() == generateButton) {
-			if (manifestInputFile == null) {
+			if (excelInputFile == null) {
 				JOptionPane.showMessageDialog(this, inputErrorMessage, errorMessageTitle, JOptionPane.ERROR_MESSAGE);
-			} else if (manifestOutputFile == null) {
+			} else if (outputFolder == null) {
 				JOptionPane.showMessageDialog(this, outputErrorMessage, errorMessageTitle, JOptionPane.ERROR_MESSAGE);
 			} else {
                 try {
-				    controller.runWorkflow(manifestInputFile, manifestOutputFile);
+				    controller.runWorkflow(excelInputFile, outputFolder);
 				    JOptionPane.showMessageDialog(this, successText, "Success!", JOptionPane.PLAIN_MESSAGE);
-                } catch (SheetNotFoundException snfe) {
-                    JOptionPane.showMessageDialog(this, snfe.getMessage(), snfe.getClass().getName(), JOptionPane.ERROR_MESSAGE);
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(this, e+"\n"+ Util.convertStackTraceToString(e.getStackTrace()), e.getClass().getName(), JOptionPane.ERROR_MESSAGE);
                 }

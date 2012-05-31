@@ -19,17 +19,16 @@
 
 package net.mcnewfamily.rmcnew.view;
 
-import net.mcnewfamily.rmcnew.model.config.CrcManifestProcessorConfig;
+import net.mcnewfamily.rmcnew.controller.ParseController;
 import net.mcnewfamily.rmcnew.model.Util;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainWindow extends JFrame {
-    public static final String mainTitle = "CRC Manifest Processor";
+    public static final String mainTitle = "ParseChop";
     private static JTabbedPane tabbedPane = new JTabbedPane();
-    private static PreManifestTab preManifestTab;
-    private static FinalManifestTab finalManifestTab;
+    private static ParseTab parseTab;
     private static AboutTab aboutTab;
 
     public MainWindow(String s) throws HeadlessException {
@@ -42,12 +41,8 @@ public class MainWindow extends JFrame {
         }
     }
 
-    public static PreManifestTab getPreManifestTab() {
-        return preManifestTab;
-    }
-
-    public static FinalManifestTab getFinalManifestTab() {
-        return finalManifestTab;
+    public static ParseTab getParseTab() {
+        return parseTab;
     }
 
     public static AboutTab getAboutTab() {
@@ -58,7 +53,6 @@ public class MainWindow extends JFrame {
         MainWindow mainWindow = null;
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            CrcManifestProcessorConfig.init();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(mainWindow, e + "\n" + Util.convertStackTraceToString(e.getStackTrace()), e.getClass().getName(), JOptionPane.ERROR_MESSAGE);
         }
@@ -67,10 +61,8 @@ public class MainWindow extends JFrame {
         Container contentPane = mainWindow.getContentPane();
         contentPane.add(tabbedPane);
         // add content
-        preManifestTab = new PreManifestTab();
-        mainWindow.addTab("CRC Pre Manifest", preManifestTab);
-        finalManifestTab = new FinalManifestTab();
-        mainWindow.addTab("CRC Final Manifest", finalManifestTab);
+        parseTab = new ParseTab("Chop Into ULNs", "The ULNs were written to text files!", new ParseController());
+        mainWindow.addTab("ParseChop", parseTab);
         aboutTab = new AboutTab();
         mainWindow.addTab("About", aboutTab);
 

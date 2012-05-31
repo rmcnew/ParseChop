@@ -21,13 +21,9 @@ package net.mcnewfamily.rmcnew.model;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DateUtil;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.*;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Util {
 
@@ -45,23 +41,6 @@ public class Util {
             }
         }
         return builder.toString();
-    }
-
-    public static String LOCATION_REGEX = "^CAMP|^COB|^FOB|^COP|^FB|^ABP|^PB|^FORWARD OPERATING BASE|^FIRE BASE|^COMBAT OUTPOST|^ANP|^OP|^VSO|^VSP|ANP$|AFLD$|AFB$|DC$|OP$|PRT$|AIRBASE$|AIR BASE$|AIRFIELD$|AIR FIELD$";
-    public static Pattern locationPattern = Pattern.compile(LOCATION_REGEX);
-
-    public static String stripLocationPrefixesAndSuffixes(String string) {
-    // remove destination prefixes: CAMP, FOB, COP, FORWARD OPERATING BASE, FIRE BASE, COMBAT OUTPOST, ANP, etc.
-    // remove destination suffixes: AIRFIELD, AIRBASE, ANP, OP, etc.
-        if (notNullAndNotEmpty(string)) {
-            string = string.trim();
-            if (string.length() > 0) {
-                Matcher locationMatcher = locationPattern.matcher(string);
-                string = locationMatcher.replaceFirst("");
-                string = string.trim();
-            }
-        }
-        return string;
     }
 
     public static String getCellValueAsStringOrEmptyString(Cell cell) {
@@ -92,6 +71,11 @@ public class Util {
         return value;
     }
 
+    public static String zeroPadSSN(String ssn) {
+        int ssnInt = Integer.parseInt(ssn);
+        return String.format("%09d", ssnInt);
+    }
+
     public static File attachXlsxExtensionIfMissing(File outputFile) {
         String filename = outputFile.getAbsolutePath();
         //System.out.println("Filename is: " + filename);
@@ -112,4 +96,17 @@ public class Util {
 
     public static final FileNameExtensionFilter EXCEL_FILTER = new FileNameExtensionFilter("Excel spreadsheets", "xlsx", "xls", "XLSX", "XLS");
 
+    public static void main(String[] args) {
+        // tests
+        int test1 = 333445555;
+        int test2 =    112222;
+        int test3 =  77889999;
+        int test4 =       123;
+
+        System.out.println(test1 + " => " + zeroPadSSN(String.valueOf(test1)));
+        System.out.println(test2 + " => " + zeroPadSSN(String.valueOf(test2)));
+        System.out.println(test3 + " => " + zeroPadSSN(String.valueOf(test3)));
+        System.out.println(test4 + " => " + zeroPadSSN(String.valueOf(test4)));
+
+    }
 }

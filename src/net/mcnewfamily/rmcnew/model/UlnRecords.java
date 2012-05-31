@@ -21,6 +21,7 @@ package net.mcnewfamily.rmcnew.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class UlnRecords {
 
@@ -40,4 +41,15 @@ public class UlnRecords {
 		}
 	}
 
+    public ArrayList<Record> get(Object o) {
+        return ulnRecords.get(o);
+    }
+
+    public boolean isEmpty() {
+        return ulnRecords.isEmpty();
+    }
+
+    public Set<String> keySet() {
+        return ulnRecords.keySet();
+    }
 }

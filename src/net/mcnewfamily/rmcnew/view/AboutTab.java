@@ -39,32 +39,29 @@ public class AboutTab extends JComponent {
 	}
 
     private final static String ABOUT_TAB_HTML = "<html>" +
-        "<h2>CRC Manifest Processor, Copyright (c) 2011 Richard Scott McNew.</h2>" +
+        "<h2>ParseChop, Copyright (c) 2012 Richard Scott McNew.</h2>" +
         "<p>" +
-        "This application handles the manual process of assigning transportation" +
-        " hubs for incoming personnel from the CRC." +
+        "ParseChop parses Excel personnel rosters into ULN text files" +
+        " suitable for upload into TPS." +
         "</p><p>" +
-        "The hub assignments can be to create ULNs needed to allocate transportation" +
-        " assets so that incoming non-unit related personnel replacements (NRPs) quickly to their final destinations in theater." +
-        "</p><p>" +
-        "CRC Manifest Processor is free software: you can redistribute it and/or modify" +
+        "ParseChop is free software: you can redistribute it and/or modify" +
         " it under the terms of the GNU General Public License as published by" +
         " the Free Software Foundation, either version 3 of the License, or" +
         " (at your option) any later version." +
         "</p><p>" +
-        "CRC Manifest Processor is distributed in the hope that it will be useful," +
+        "ParseChop is distributed in the hope that it will be useful," +
         " but WITHOUT ANY WARRANTY; without even the implied warranty of" +
         " MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the" +
         " GNU General Public License for more details." +
         "</p><p>" +
         "You should have received a copy of the GNU General Public License" +
-        " along with CRC Manifest Processor.  If not, see" + 
+        " along with ParseChop.  If not, see" +
         " <a href=\"http://www.gnu.org/licenses/\">http://www.gnu.org/licenses/</a>. " +
         "</p><p>" +
-        " The source for CRC Manifest Processor is available on GitHub: " +
-        " <a href=\"https://github.com/rmcnew/crcManifestProcessor/\">https://github.com/rmcnew/crcManifestProcessor/</a> " +
+        " The source for ParseChop is available on GitHub: " +
+        " <a href=\"https://github.com/rmcnew/ParseChop\">https://github.com/rmcnew/ParseChop</a> " +
         "</p><p>" +
-        " The CRC Manifest Processor uses libraries from the Apache POI Project: " +
+        " ParseChop uses libraries from the Apache POI Project: " +
         " <a href=\"http://poi.apache.org/\">http://poi.apache.org/</a>" +
         "</p></html>" ;
 

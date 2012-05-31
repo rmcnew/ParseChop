@@ -19,80 +19,33 @@
 
 package net.mcnewfamily.rmcnew.dao;
 
-import net.mcnewfamily.rmcnew.model.data.Manifest;
+import net.mcnewfamily.rmcnew.model.Record;
 import net.mcnewfamily.rmcnew.model.UlnRecords;
-import net.mcnewfamily.rmcnew.model.Constants;
-import net.mcnewfamily.rmcnew.model.Util;
-import org.apache.poi.xssf.usermodel.*;
 
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Set;
 
 public class TextFileWriter {
 
-    XSSFWorkbook workbook;
-    FileOutputStream fileOutputStream;
-
-    public void openXlsxForWriting(File file) throws IOException {
-        if (file != null) {
-            workbook = new XSSFWorkbook();
-            fileOutputStream = new FileOutputStream(file);
-        }
-    }
-
-    public void close() throws IOException {
-        workbook.write(fileOutputStream);
-        fileOutputStream.close();
-    }
-
-    protected void writeRecords(UlnRecords ulnRecords, String sheetName) {
-        if (ulnRecords != null && !ulnRecords.isEmpty()) {
-            XSSFSheet finalManifestSheet = ulnRecords.toSheetEssence(sheetName).toXSSFSheet(workbook);
-            for (int columnIndex = 0; columnIndex < 13; columnIndex++) {
-                finalManifestSheet.autoSizeColumn(columnIndex);
+    public void writeRecords(UlnRecords ulnRecords, File outputFolder) throws IOException {
+        if (ulnRecords != null && !ulnRecords.isEmpty() && outputFolder != null) {
+            Set<String> ulns = ulnRecords.keySet();
+            for (String uln: ulns) {
+                ArrayList<Record> records = ulnRecords.get(uln);
+                String outputFilename = outputFolder.getAbsolutePath() + File.separator +  uln + "-" + records.size() + ".txt";
+                //System.out.println("Writing file:  " + outputFilename);
+                FileWriter fileWriter = new FileWriter(outputFilename);
+                for (Record record : records) {
+                    fileWriter.write(record.getSsn() +  "\r\n");
+                }
+                fileWriter.flush();
+                fileWriter.close();
             }
         } else {
-            throw new IllegalArgumentException("Cannot create XLSX sheet from null or empty UlnRecords!");
+            throw new IllegalArgumentException("Cannot create text files from null or empty UlnRecords!");
         }
-    }
-
-    protected void writeSummaryTable(Manifest manifest, String sheetName) {
-        if (manifest != null) {
-            XSSFSheet manifestCountsSheet = manifest.toSheetEssence(sheetName).toXSSFSheet(workbook);
-            for (int columnIndex = 0; columnIndex < 4; columnIndex++) {
-                manifestCountsSheet.autoSizeColumn(columnIndex);
-            }
-        } else {
-            throw new IllegalArgumentException("Cannot create XLSX sheet from null or empty manifest!");
-        }
-    }
-
-    protected void writeInstructions(Manifest manifest) {
-        if (manifest != null) {
-            XSSFSheet destSheet = workbook.createSheet(Constants.INSTRUCTIONS_SHEET);
-            XSSFSheet srcSheet = manifest.getInstructions();
-            Util.copyXSSFSheet(srcSheet, destSheet);
-            for (int columnIndex = 0; columnIndex < 13; columnIndex++) {
-                destSheet.autoSizeColumn(columnIndex);
-            }
-        } else {
-            throw new IllegalArgumentException("Cannot create instructions sheet from null Manifest!");
-        }
-    }
-
-    protected void createTextBox(XSSFSheet xssfSheet, XSSFClientAnchor xssfClientAnchor, String text) {
-        if (xssfSheet != null) {
-            XSSFDrawing xssfDrawing = xssfSheet.createDrawingPatriarch();
-            XSSFTextBox xssfTextBox = xssfDrawing.createTextbox(xssfClientAnchor);
-            xssfTextBox.setText(new XSSFRichTextString(text));
-
-        } else {
-            throw new IllegalArgumentException("Cannot create drawing on  null or empty sheet!");
-        }
-    }
-
-    public void copyInstructionsSheet() {
-
     }
 }
